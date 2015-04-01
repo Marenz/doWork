@@ -70,10 +70,19 @@ ApplicationWindow {
                         target: inputField;
                         onAccepted:
                         {
+                            var time = parseInt(text);
+
+                            if ( isNaN(time) || time <= 0 )
+                                return;
+
+                            console.log("Sleeping for " +
+                                        time
+                                        + " minutes");
+
                             timeInput.text = text;
                             text = "";
                             input.state = "confirm";
-                            lockTimer.interval = timeInput.text * 1000 * 60;
+                            lockTimer.interval = time * 1000 * 60;
                             lockTimer.start();
                             controller.lockScreen(false);
                         }
