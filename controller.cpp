@@ -15,7 +15,7 @@ void Controller::emergencyUnlock (Qt::ApplicationState state)
 {
     if ( state != Qt::ApplicationActive )
     {
-        qWarning() << "Application inactive, releasing controlls!";
+        qWarning() << "Warning: Application inactive, releasing controlls!";
         this->lockScreen(false);
     }
 }
