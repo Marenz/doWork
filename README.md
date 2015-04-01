@@ -13,7 +13,7 @@ For cases when you just want to finish reading something or you have to look som
 
 # Downloading
 
-You can get it from the release page or just use this direct link: https://github.com/Marenz/doWork/releases/download/v0.1/doWork.7z
+You can get it from the release page or just use this direct link: https://github.com/Marenz/doWork/releases/download/v0.2/doWork.7z
 
 # Compiling
 
