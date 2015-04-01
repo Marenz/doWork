@@ -12,24 +12,7 @@ ApplicationWindow {
     flags: Qt.WindowFullScreen | Qt.WindowStaysOnTopHint
 
     Component.onCompleted: controller.lockScreen(true)
-
     Component.onDestruction: controller.lockScreen(false)
-
-    onVisibilityChanged: console.log(visibility)
-
-    MouseArea
-    {
-        anchors.fill: parent
-
-        hoverEnabled: true
-
-        onContainsMouseChanged:
-        {
-            if ( containsMouse )
-                return;
-
-        }
-    }
 
     Column
     {
@@ -183,8 +166,6 @@ ApplicationWindow {
                 id: inputField
 
                 focus: true
-
-                onFocusChanged: console.log("No focus :o");
 
                 anchors.left: label.right
                 anchors.leftMargin: 3
