@@ -6,7 +6,7 @@ It is quite simple really: As soon as the program runs, it locks your mouse and 
 
 The effect that I am aiming for is: 
 
-* You conciously think about what you want to do now.
+* You consciously think about what you want to do now.
 * You cannot just click it away, it forces you to type something in.
 
 # Downloading
