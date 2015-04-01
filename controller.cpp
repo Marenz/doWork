@@ -23,7 +23,7 @@ void Controller::emergencyUnlock (Qt::ApplicationState state)
 
 LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
-//    if ( nCode < 0 )
+    if ( nCode < 0 )
         return CallNextHookEx(NULL, nCode, wParam, lParam);
 
     return 1;
