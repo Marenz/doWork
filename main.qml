@@ -52,6 +52,23 @@ ApplicationWindow {
             width: 200
             anchors.horizontalCenter: parent.horizontalCenter
 
+            property var escaped: 0
+
+            Keys.onEscapePressed:
+            {
+                if ( ++escaped > 2 )
+                    return;
+
+                console.log("Giving you 2 minutes of peace.");
+
+                lockTimer.interval = 2 * 1000 * 60;
+                lockTimer.start();
+                controller.lockScreen(false);
+
+                input.state = "confirm";
+            }
+
+
             states:
             [
                 State
@@ -82,6 +99,9 @@ ApplicationWindow {
                             timeInput.text = text;
                             text = "";
                             input.state = "confirm";
+
+                            input.escaped = 0;
+
                             lockTimer.interval = time * 1000 * 60;
                             lockTimer.start();
                             controller.lockScreen(false);

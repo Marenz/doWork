@@ -9,6 +9,8 @@ The effect that I am aiming for is:
 * You consciously think about what you want to do now.
 * You cannot just click it away, it forces you to type something in.
 
+For cases when you just want to finish reading something or you have to look something up quick (like an emergency number) you can now press ESC up to two times in a row, each giving you 2 minutes of peace (you escaped! :D Get it? No? Whatever.) After that you have to specify reason & time before using ESC again.
+
 # Downloading
 
 You can get it from the release page or just use this direct link: https://github.com/Marenz/doWork/releases/download/v0.1/doWork.7z
@@ -20,7 +22,6 @@ Easiest way to compile is to just open the QtCreator project and use the GUI.
 
 # Later plans
 
-* I might implement a small snooze so that you can press ESC and it will give you 2 minutes of peace.
 * A server backend so that you can use it with several computers
 * Recording of what you enter according with the time you entered and the duration you guessed
 * Auto completetion based on your past records

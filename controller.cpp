@@ -44,7 +44,6 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
             case VK_CONTROL:
             case VK_MENU:
             case VK_PAUSE:
-            case VK_ESCAPE:
             case VK_LWIN:
             case VK_RWIN:
                 return 1;
