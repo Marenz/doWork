@@ -9,6 +9,10 @@ The effect that I am aiming for is:
 * You conciously think about what you want to do now.
 * You cannot just click it away, it forces you to type something in.
 
+# Downloading
+
+You can get it from the release page or just use this direct link: https://github.com/Marenz/doWork/releases/download/v0.1/doWork.7z
+
 # Compiling
 
 Easiest way to compile is to just open the QtCreator project and use the GUI.
