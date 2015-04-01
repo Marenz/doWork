@@ -6,7 +6,7 @@ ApplicationWindow {
     visible: true
     width: Screen.desktopAvailableWidth
     height: Screen.desktopAvailableHeight
-    title: qsTr("Do Work Reminder")
+    title: qsTr("Do Work Reminder v0.2")
     id: main
 
     flags: Qt.WindowFullScreen | Qt.WindowStaysOnTopHint
