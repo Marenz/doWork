@@ -11,7 +11,6 @@ ApplicationWindow {
 
     flags: Qt.WindowFullScreen | Qt.WindowStaysOnTopHint
 
-    Component.onCompleted: controller.lockScreen(true)
     Component.onDestruction: controller.lockScreen(false)
 
     Column
