@@ -153,7 +153,7 @@ ApplicationWindow {
             Text
             {
                 id: label
-                text: "I want to "
+                text: qsTr("I want to ");
 
                 anchors.left: parent.left
 
@@ -210,7 +210,7 @@ ApplicationWindow {
             Text
             {
                 id: labelTime
-                text: " minutes"
+                text: qsTr(" minutes")
                 visible: true
 
                 anchors.left: inputField.right
