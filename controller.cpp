@@ -2,6 +2,12 @@
 
 #include <QDebug>
 #include <QApplication>
+#include <QWidget>
+#include <QQmlApplicationEngine>
+
+#include <QWindow>
+
+extern QQmlApplicationEngine* engine;
 
 Controller::Controller(const QApplication *app) :
     QObject(NULL)
@@ -18,15 +24,6 @@ void Controller::emergencyUnlock (Qt::ApplicationState state)
         qWarning() << "Warning: Application inactive, releasing controlls!";
         this->lockScreen(false);
     }
-}
-
-
-LRESULT CALLBACK LowLevelMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
-{
-    if ( nCode < 0 )
-        return CallNextHookEx(NULL, nCode, wParam, lParam);
-
-    return 1;
 }
 
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
@@ -60,8 +57,22 @@ void Controller::lockScreen ( bool lock )
 {
     if (lock)
     {
-        mouse_hook_id = SetWindowsHookEx(WH_MOUSE_LL,
-                                         LowLevelMouseProc, NULL, 0);
+        QWindow *rootObject = (QWindow*)engine->rootObjects().first();
+
+        auto h = rootObject->property(("height")).toInt();
+        auto w = rootObject->property(("width")).toInt();
+        auto x = rootObject->property(("x")).toInt();
+        auto y = rootObject->property(("y")).toInt();
+
+        RECT rect;
+
+        rect.left = x;
+        rect.top = y;
+        rect.right = x+w;
+        rect.bottom = y+h;
+
+        ClipCursor(&rect);
+
         keyboard_hook_id = SetWindowsHookEx(WH_KEYBOARD_LL,
                                             LowLevelKeyboardProc, NULL, 0);
     }
@@ -69,5 +80,6 @@ void Controller::lockScreen ( bool lock )
     {
         UnhookWindowsHookEx(mouse_hook_id);
         UnhookWindowsHookEx(keyboard_hook_id);
+        ClipCursor(NULL);
     }
 }

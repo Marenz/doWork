@@ -14,7 +14,7 @@ class Controller : public QObject
 private slots:
     void emergencyUnlock (Qt::ApplicationState state);
 public:
-    explicit Controller(const QApplication *app = 0);
+    explicit Controller(const QApplication *app);
 
     Q_INVOKABLE void lockScreen ( bool lock );
 
