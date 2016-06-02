@@ -58,7 +58,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 
 void Controller::lockScreen ( bool lock )
 {
-    if (lock)
+    /*if (lock)
     {
         mouse_hook_id = SetWindowsHookEx(WH_MOUSE_LL,
                                          LowLevelMouseProc, NULL, 0);
@@ -69,5 +69,5 @@ void Controller::lockScreen ( bool lock )
     {
         UnhookWindowsHookEx(mouse_hook_id);
         UnhookWindowsHookEx(keyboard_hook_id);
-    }
+    }*/
 }
