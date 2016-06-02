@@ -2,208 +2,152 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.0
 
-ApplicationWindow {
+ApplicationWindow
+{
     visible: true
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
-    title: qsTr("Do Work Reminder v0.2")
+    width: 600
+    height: 600
+    title: qsTr("Do Work Reminder v1.0")
     id: main
+    objectName: "main"
 
-    flags: Qt.WindowFullScreen | Qt.WindowStaysOnTopHint
+    flags: Qt.FramelessWindowHint
+    color: "#7F99CE"
 
     Component.onDestruction: controller.lockScreen(false)
+
+    function hide ( seconds )
+    {
+        lockTimer.interval = 1000 * seconds;
+        lockTimer.start();
+        controller.lockScreen(false);
+
+        main.visible = false;
+    }
+
+    Timer
+    {
+        id: lockTimer
+
+        running: false
+
+        triggeredOnStart: false
+
+        repeat: false
+
+        onTriggered:
+        {
+            console.log("locking..");
+            controller.lockScreen(true);
+            main.visible = true;
+            taskInput.focus = true;
+            taskInput.selectAll();
+        }
+    }
+
+
+    ListModel
+    {
+        id: listModel
+    }
 
     Column
     {
         anchors.fill: parent
-        anchors.margins: 100
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.margins: 50
+        //anchors.verticalCenter: parent.verticalCenter
+        spacing: 10
+        id: column
 
-        height: 200
+        property var escaped: 0
 
-        ListView
+        Keys.onEscapePressed:
         {
+            if ( ++escaped > 2 )
+                return;
 
+            console.log("Giving you 2 minutes of peace.");
+
+            hide(2*60);
         }
 
-        Timer
+        Row
         {
-            id: lockTimer
+            //width: 400
+            //height: 40
 
-            running: false
-
-            triggeredOnStart: false
-
-            repeat: false
-
-            onTriggered:
-            {
-                console.log("Unlocking..");
-                controller.lockScreen(true);
-                input.state = ""
-            }
-        }
-
-        Item
-        {
-            id: input
-
-            width: 200
             anchors.horizontalCenter: parent.horizontalCenter
 
-            property var escaped: 0
-
-            Keys.onEscapePressed:
-            {
-                if ( ++escaped > 2 )
-                    return;
-
-                console.log("Giving you 2 minutes of peace.");
-
-                lockTimer.interval = 2 * 1000 * 60;
-                lockTimer.start();
-                controller.lockScreen(false);
-
-                input.state = "confirm";
-            }
-
-
-            states:
-            [
-                State
-                {
-                    name: "time"
-
-                    PropertyChanges  {
-                        target: taskInput; visible: true
-                    }
-
-                    PropertyChanges  {
-                        target: labelFor; visible: true
-                    }
-
-                    PropertyChanges {
-                        target: inputField;
-                        onAccepted:
-                        {
-                            var time = parseInt(text);
-
-                            if ( isNaN(time) || time <= 0 )
-                                return;
-
-                            console.log("Sleeping for " +
-                                        time
-                                        + " minutes");
-
-                            timeInput.text = text;
-                            text = "";
-                            input.state = "confirm";
-
-                            input.escaped = 0;
-
-                            lockTimer.interval = time * 1000 * 60;
-                            lockTimer.start();
-                            controller.lockScreen(false);
-                        }
-                    }
-
-                    AnchorChanges
-                    {
-                        target: inputField
-                        anchors.left: labelFor.right
-                    }
-                },
-
-                State
-                {
-                    name: "confirm"
-
-                    PropertyChanges {
-                        target: main
-                        visible: false
-                    }
-
-                    PropertyChanges  {
-                        target: taskInput; visible: true
-                    }
-
-                    PropertyChanges  {
-                        target: labelFor; visible: true
-                    }
-
-                    PropertyChanges  {
-                        target: timeInput; visible: true
-                    }
-
-                    PropertyChanges {
-                        target: inputField
-                        visible: false
-                        text: ""
-                    }
-
-                    AnchorChanges  {
-                        target: labelTime
-                        anchors.left: timeInput.right
-                    }
-
-                }
-
-            ]
-
             Text
             {
-                id: label
-                text: qsTr("I want to ");
-
-                anchors.left: parent.left
-
+                id: taskLabel
+                text: qsTr("I will ");
             }
 
-            Text
+            TextField
             {
                 id: taskInput
-                text: ""
-                visible: false
 
-                anchors.left: label.right
-                anchors.leftMargin: 3
+                focus: true
+
+                placeholderText: "make a list"
+
+                onAccepted:
+                {
+                    taskInput.focus = false;
+                    timeInput.focus = true;
+                    timeInput.selectAll();
+                }
             }
 
             Text
             {
                 id: labelFor
                 text: " for "
-                visible: false
-
-                anchors.left: taskInput.right
-                anchors.leftMargin: 0
-            }
-
-            Text
-            {
-                id: timeInput
-                text: ""
-                visible: false
-
-                anchors.left: labelFor.right
-                anchors.leftMargin: 1
+                visible: true
             }
 
             TextField
             {
-                id: inputField
-
-                focus: true
-
-                anchors.left: label.right
-                anchors.leftMargin: 3
-                anchors.right: parent.right
+                id: timeInput
+                focus: false
+                width: 30
+                placeholderText: "20"
+                onTextChanged: timeInput.textColor = "black";
 
                 onAccepted:
                 {
-                    taskInput.text = text;
-                    text = "";
-                    input.state = "time";
+                    var time = parseInt(text);
+
+                    if (taskInput.text == "")
+                    {
+                        taskInput.focus = true;
+                        return;
+                    }
+
+                    if ( isNaN(time) || time <= 0 )
+                    {
+                        timeInput.textColor = "red";
+                        return;
+                    }
+
+                    console.log("Sleeping for " +
+                                time
+                                + " minutes");
+
+                    var date = new Date;
+
+                    if (listModel.count == 0 ||
+                        listModel.get(0).task != taskInput.text)
+                    {
+                        listModel.insert(0,
+                                         { 'task' : taskInput.text,
+                                           'time' : date.toTimeString()});
+                    }
+
+                    column.escaped = 0;
+
+                    hide(time*60);
                 }
             }
 
@@ -212,9 +156,29 @@ ApplicationWindow {
                 id: labelTime
                 text: qsTr(" minutes")
                 visible: true
+            }
+        }
 
-                anchors.left: inputField.right
-                anchors.leftMargin: 0
+
+        TableView
+        {
+            id: taskTable
+            model: listModel
+
+            height: parent.height
+            width: 500
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            TableViewColumn {
+                role: "task"
+                title: "Task"
+                width: 400
+            }
+            TableViewColumn {
+                role: "time"
+                title: "Time"
+                width: 97
             }
         }
     }
